@@ -1,0 +1,18 @@
+# Ambiente virtual
+venv/
+.venv/
+ENV/
+
+# Configurações do editor
+.vscode/
+*.swp
+*.swo
+
+# Dados locais e datasets pesados
+data/
+*.csv
+
+# Cache do Python e Streamlit
+__pycache__/
+*.py[cod]
+.streamlit/
