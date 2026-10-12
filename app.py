@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 
 # Configuração da página (deve ser sempre a primeira instrução do Streamlit)
@@ -10,12 +11,12 @@ st.set_page_config(
 
 st.title("📈 Dashboard de Análise de Arbitragem de Criptomoedas")
 st.write(
-    "Esta aplicação analisa os dados de microstructure e os spreads entre"
-    " diferentes corretoras."
+    "Esta aplicação analisa dados de microstructure e os spreads entre"
+    " diferentes corretoras de forma interativa."
 )
 
 
-# Função para carregar os dados e já aplicar os nomes amigáveis
+# Função para carregar os dados e já aplicar os nomes amigáveis em português
 @st.cache_data
 def carregar_dados():
   caminho_ficheiro = "data/cross_exchange_spread.csv"
@@ -46,39 +47,75 @@ df = carregar_dados()
 if df is not None:
   st.success("Dataset carregado com sucesso!")
 
-  # Mostrar uma prévia dos dados brutos (agora com o st.dataframe incluído!)
-  with st.expander("🔍 Ver amostra dos dados brutos"):
-    st.dataframe(df.head(10))
+  # --- BARRA LATERAL (Filtros Dinâmicos) ---
+  st.sidebar.header("🎛️ Filtros do Dashboard")
 
-  # Métricas / KPIs rápidos no topo
+  # Filtro por Corretora
+  corretoras_disponiveis = df["Corretora"].unique().tolist()
+  corretora_selecionada = st.sidebar.multiselect(
+      "Selecione a Corretora:",
+      options=corretoras_disponiveis,
+      default=corretoras_disponiveis,
+  )
+
+  # Filtro por Par / Cripto
+  pares_disponiveis = df["Par / Cripto"].unique().tolist()
+  par_selecionado = st.sidebar.multiselect(
+      "Selecione o Par / Cripto:",
+      options=pares_disponiveis,
+      default=pares_disponiveis,
+  )
+
+  # Aplicar os filtros ao DataFrame principal
+  df_filtrado = df[
+      df["Corretora"].isin(corretora_selecionada)
+      & df["Par / Cripto"].isin(par_selecionado)
+  ]
+
+  # --- MÉTRICAS / KPIS PRINCIPAIS ---
   st.subheader("📊 Indicadores Principais")
   col1, col2, col3 = st.columns(3)
 
   with col1:
-    st.metric(label="Total de Registos", value=f"{len(df):,}".replace(",", "."))
+    st.metric(
+        label="Registos Filtrados",
+        value=f"{len(df_filtrado):,}".replace(",", "."),
+    )
 
   with col2:
-    st.metric(label="Total de Colunas", value=len(df.columns))
+    st.metric(label="Corretoras Selecionadas", value=len(corretora_selecionada))
 
   with col3:
-    st.metric(label="Estado dos Dados", value="Pronto para Análise")
+    st.metric(label="Pares Selecionados", value=len(par_selecionado))
 
-  # Pré-visualização das colunas disponíveis
-  st.subheader("🛠️ Explorador de Colunas")
-  colunas = df.columns.tolist()
-  coluna_selecionada = st.selectbox(
-      "Selecione uma coluna para visualizar o gráfico de linhas:", colunas
-  )
+  # --- GRÁFICO INTERATIVO COM PLOTLY ---
+  st.subheader("📊 Evolução Gráfica do Spread Máximo")
 
-  if coluna_selecionada:
-    # Gráfico simples com base na coluna selecionada (apenas para colunas numéricas)
-    try:
-      st.line_chart(df[coluna_selecionada].head(200))
-    except Exception:
-      st.info(
-          "ℹ️ Seleciona uma coluna numérica (como Preço ou Spreads) para gerar o"
-          " gráfico."
-      )
+  if not df_filtrado.empty:
+    # Criar um gráfico Plotly interativo para as primeiras 500 linhas filtradas
+    fig = px.line(
+        df_filtrado.head(500),
+        x="Data / Hora",
+        y="Spread Máximo Arbitrável (bps)",
+        color="Corretora",
+        title="Spread Máximo por Corretora ao Longo do Tempo",
+        markers=True,
+    )
+    fig.update_layout(
+        xaxis_title="Data / Hora",
+        yaxis_title="Spread Máximo Arbitrável (bps)",
+        legend_title="Corretora",
+    )
+    st.plotly_chart(fig, use_container_width=True)
+  else:
+    st.warning(
+        "⚠️ Não existem dados disponíveis para os filtros selecionados na barra"
+        " lateral."
+    )
+
+  # --- PRÉ-VISUALIZAÇÃO DOS DADOS BRUTOS ---
+  with st.expander("🔍 Ver amostra dos dados filtrados"):
+    st.dataframe(df_filtrado.head(20), use_container_width=True)
 
 else:
   st.error(
