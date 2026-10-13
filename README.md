@@ -3,7 +3,7 @@
 Uma aplicação desenvolvida em **Python** e **Streamlit** para identificar, filtrar e visualizar oportunidades de arbitragem entre diferentes corretoras de criptomoedas (*exchanges*) em tempo real.
 
 ## 📥 Downloads e Recursos
-
+* **Projeto Compactado:** [Download do Código Fonte (.zip)](../../archive/refs/heads/main.zip)
 * **Dataset da Base de Dados:** Ficheiro disponível na pasta `data/cross_exchange_spread.csv`
 
 ---
@@ -84,9 +84,3 @@ streamlit run app.py
 - [ ] Conexão via WebSocket para dados em tempo real.
 - [ ] Cálculo automático de lucros estimados descontando taxas (*fees*) de ordem e saque.
 - [ ] Alertas visuais e sonoros quando o *spread* ultrapassar um limite configurável.
-
----
-
-## 📜 Licença
-
-Este projeto é de código aberto sob a licença [MIT](LICENSE).
