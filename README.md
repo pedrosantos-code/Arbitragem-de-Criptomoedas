@@ -4,7 +4,6 @@ Uma aplicação desenvolvida em **Python** e **Streamlit** para identificar, fil
 
 ## 📥 Downloads e Recursos
 
-* **Projeto Compactado:** [Download do Código Fonte (.zip)](../../archive/refs/heads/main.zip)
 * **Dataset da Base de Dados:** Ficheiro disponível na pasta `data/cross_exchange_spread.csv`
 
 ---
