@@ -33,7 +33,7 @@ Este dashboard resolve esse problema transformando microestrutura de mercado bru
 
 ## 📸 Demonstração da Interface
 
-*(Dica: Insere aqui uma screenshot ou GIF do teu dashboard a rodar no navegador)*
+![Demonstração do Dashboard](assets/dashboard.gif)
 
 ---
 
