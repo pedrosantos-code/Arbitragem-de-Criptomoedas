@@ -1,3 +1,5 @@
+## Link do site no ar: https://arbitragem-de-criptomoedas-c9ohmrlo83nquzunjyw7ey.streamlit.app/
+
 # 📈 Dashboard de Arbitragem & Microestrutura Crypto
 
 Uma aplicação desenvolvida em **Python** e **Streamlit** para identificar, filtrar e visualizar oportunidades de arbitragem entre diferentes corretoras de criptomoedas (*exchanges*) em tempo real.
