@@ -2,7 +2,7 @@
 
 # 📈 Dashboard de Arbitragem & Microestrutura Crypto
 
-Uma aplicação desenvolvida em **Python** e **Streamlit** para identificar, filtrar e visualizar oportunidades de arbitragem entre diferentes corretoras de criptomoedas (*exchanges*) em tempo real.
+Uma aplicação desenvolvida em **Python** e **Streamlit** para explorar dados históricos de spreads entre diferentes corretoras de criptomoedas (*exchanges*).
 
 ## 📥 Downloads e Recursos
 * **Projeto Compactado:** [Download do Código Fonte (.zip)](../../archive/refs/heads/main.zip)
@@ -26,10 +26,14 @@ Identificar essas oportunidades manualmente em tabelas brutas ou logs de dados �
 
 Este dashboard resolve esse problema transformando microestrutura de mercado bruta num painel interativo e visual:
 
-* **Mapeamento de Spreads Máximos:** Gráficos temporais (*Plotly*) isolam os picos de arbitragem aproveitáveis por corretora.
-* **Filtros por Par e Corretora:** Permite focar apenas nas *exchanges* onde o utilizador possui conta e liquidez.
-* **Métricas Principais:** Consolidação imediata do volume de dados filtrados e corretoras analisadas.
-* **Tratamento de Dados:** Higienização de dados em tempo de execução com **Pandas** para garantir uma visualização limpa de nulos.
+* **Evolução dos spreads:** Gráfico temporal interativo por ativo, consolidando registos repetidos entre corretoras.
+* **Filtros combináveis:** Seleção de ativo, corretora, regime de mercado e período.
+* **Indicadores do período:** Maior e médio spread bruto, volume de registos e eventos de estresse sem duplicar observações.
+* **Destaques históricos:** Tabela com os maiores spreads observados no recorte selecionado.
+* **Interface responsiva:** Layout adaptado para ecrãs de computador e dispositivos móveis.
+* **Tratamento de dados:** Conversão de datas e valores numéricos para suportar filtros e gráficos consistentes.
+
+> Os dados são históricos; os spreads não incluem taxas, slippage ou outros custos e não garantem oportunidades executáveis ou lucro.
 
 ---
 
