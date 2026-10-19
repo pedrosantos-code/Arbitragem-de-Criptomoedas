@@ -26,14 +26,14 @@ Identificar essas oportunidades manualmente em tabelas brutas ou logs de dados �
 
 Este dashboard resolve esse problema transformando microestrutura de mercado bruta num painel interativo e visual:
 
-* **Evolução dos spreads:** Gráfico temporal interativo por ativo, consolidando registos repetidos entre corretoras.
+* **Evolução dos spreads:** Gráfico temporal interativo por ativo, recalculado conforme as corretoras selecionadas.
 * **Filtros combináveis:** Seleção de ativo, corretora, regime de mercado e período.
 * **Indicadores do período:** Maior e médio spread bruto, volume de registos e eventos de estresse sem duplicar observações.
 * **Destaques históricos:** Tabela com os maiores spreads observados no recorte selecionado.
 * **Interface responsiva:** Layout adaptado para ecrãs de computador e dispositivos móveis.
 * **Tratamento de dados:** Conversão de datas e valores numéricos para suportar filtros e gráficos consistentes.
 
-> Os dados são históricos; os spreads não incluem taxas, slippage ou outros custos e não garantem oportunidades executáveis ou lucro.
+> Os dados são históricos; o spread é recalculado entre as corretoras selecionadas, e não inclui taxas, slippage ou outros custos. Não garante oportunidades executáveis ou lucro.
 
 ---
 

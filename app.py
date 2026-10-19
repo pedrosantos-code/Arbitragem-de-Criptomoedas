@@ -136,15 +136,32 @@ df_filtrado = df[
     & df["Data / Hora"].dt.date.between(inicio, fim)
 ]
 
+spreads_por_ativo = (
+    df_filtrado.groupby(["Data / Hora", "Par / Cripto"], as_index=False)
+    .agg(
+        spread_minimo=("Spread de Referência (bps)", "min"),
+        spread_maximo=("Spread de Referência (bps)", "max"),
+        **{
+            "Regime de Mercado": ("Regime de Mercado", "first"),
+            "Estresse de Mercado?": ("Estresse de Mercado?", "max"),
+        },
+    )
+)
+spreads_por_ativo["Spread Máximo (bps)"] = (
+    spreads_por_ativo["spread_maximo"] - spreads_por_ativo["spread_minimo"]
+)
+
 st.caption(
     f"Período analisado: {inicio:%d/%m/%Y} – {fim:%d/%m/%Y} · "
     f"{len(df_filtrado):,} registros".replace(",", ".")
 )
+if len(corretoras_selecionadas) < 2:
+    st.info("Selecione pelo menos duas corretoras para comparar spreads.")
 
 st.subheader("Resumo do período")
 col1, col2, col3, col4 = st.columns(4)
 
-if df_filtrado.empty:
+if spreads_por_ativo.empty:
     with col1:
         st.metric("Maior spread bruto", "—")
     with col2:
@@ -163,12 +180,12 @@ else:
     with col1:
         st.metric(
             "Maior spread bruto",
-            f"{df_filtrado['Spread Máximo (bps)'].max():.2f} bps",
+            f"{spreads_por_ativo['Spread Máximo (bps)'].max():.2f} bps",
         )
     with col2:
         st.metric(
             "Spread médio",
-            f"{df_filtrado['Spread Máximo (bps)'].mean():.2f} bps",
+            f"{spreads_por_ativo['Spread Máximo (bps)'].mean():.2f} bps",
         )
     with col3:
         st.metric("Registros", f"{len(df_filtrado):,}".replace(",", "."))
@@ -176,11 +193,9 @@ else:
         st.metric("Eventos de estresse", f"{len(eventos_estresse):,}".replace(",", "."))
 
     st.subheader("Evolução dos spreads")
-    serie_temporal = (
-        df_filtrado.groupby(["Data / Hora", "Par / Cripto"], as_index=False)
-        ["Spread Máximo (bps)"]
-        .max()
-    )
+    serie_temporal = spreads_por_ativo[
+        ["Data / Hora", "Par / Cripto", "Spread Máximo (bps)"]
+    ]
     media_periodo = serie_temporal["Spread Máximo (bps)"].mean()
     fig = px.line(
         serie_temporal,
@@ -216,8 +231,7 @@ else:
 
     st.subheader("Maiores spreads observados")
     melhores_spreads = (
-        df_filtrado.sort_values("Spread Máximo (bps)", ascending=False)
-        .drop_duplicates(subset=["Data / Hora", "Par / Cripto"])
+        spreads_por_ativo.sort_values("Spread Máximo (bps)", ascending=False)
         .loc[
             :,
             [
@@ -252,8 +266,10 @@ else:
 with st.expander("Sobre os dados e a metodologia"):
     st.write(
         "A base contém observações históricas por ativo e corretora. "
-        "O spread máximo é repetido entre corretoras para a mesma data e ativo; "
-        "por isso, o gráfico e a lista de destaques consolidam essas repetições. "
+        "O spread é recalculado para cada data e ativo usando apenas as corretoras "
+        "selecionadas: a diferença entre o maior e o menor spread em relação à "
+        "referência. Assim, adicionar ou remover corretoras atualiza os indicadores, "
+        "o gráfico e a lista de destaques. "
         "Um spread positivo não garante uma oportunidade executável ou lucrativa "
         "após taxas, slippage, liquidez e latência."
     )
