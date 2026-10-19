@@ -13,8 +13,22 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .stApp {
-        background: #f5f7fb;
+    :root {
+        color-scheme: dark;
+    }
+    .stApp,
+    [data-testid="stAppViewContainer"] {
+        background: #0f172a;
+        color: #e2e8f0;
+    }
+    [data-testid="stHeader"] {
+        background: rgba(15, 23, 42, 0.9);
+    }
+    [data-testid="stSidebar"] {
+        background: #111c31;
+    }
+    [data-testid="stSidebar"] * {
+        color: #e2e8f0;
     }
     .block-container {
         max-width: 1440px;
@@ -22,14 +36,33 @@ st.markdown(
         padding-bottom: 3rem;
     }
     [data-testid="stMetric"] {
-        background: #ffffff;
-        border: 1px solid #e7ebf2;
+        background: #172338;
+        border: 1px solid #29374d;
         border-radius: 12px;
         padding: 1rem 1.1rem;
-        box-shadow: 0 2px 8px rgba(22, 34, 51, 0.04);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
     }
     [data-testid="stMetricLabel"] {
-        color: #5b6575;
+        color: #aab7c8;
+    }
+    [data-testid="stMetricValue"] {
+        color: #f8fafc;
+    }
+    [data-testid="stDataFrame"] {
+        border: 1px solid #29374d;
+        border-radius: 8px;
+    }
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="input"] > div {
+        background: #172338;
+        border-color: #3b4b63;
+    }
+    input,
+    textarea {
+        color-scheme: dark;
+    }
+    [data-testid="stCaption"] {
+        color: #aab7c8;
     }
     @media (max-width: 640px) {
         .block-container {
@@ -194,7 +227,12 @@ else:
 
     st.subheader("Evolução dos spreads")
     serie_temporal = spreads_por_ativo[
-        ["Data / Hora", "Par / Cripto", "Spread Máximo (bps)"]
+        [
+            "Data / Hora",
+            "Par / Cripto",
+            "Regime de Mercado",
+            "Spread Máximo (bps)",
+        ]
     ]
     media_periodo = serie_temporal["Spread Máximo (bps)"].mean()
     fig = px.line(
@@ -202,10 +240,13 @@ else:
         x="Data / Hora",
         y="Spread Máximo (bps)",
         color="Par / Cripto",
+        line_dash="Regime de Mercado",
+        hover_data=["Regime de Mercado"],
         labels={
             "Data / Hora": "Data",
             "Spread Máximo (bps)": "Spread bruto (bps)",
             "Par / Cripto": "Ativo",
+            "Regime de Mercado": "Regime",
         },
         color_discrete_sequence=["#2563eb", "#14b8a6"],
     )
@@ -217,7 +258,7 @@ else:
         annotation_position="top left",
     )
     fig.update_layout(
-        template="plotly_white",
+        template="plotly_dark",
         height=390,
         margin=dict(l=8, r=8, t=24, b=8),
         hovermode="x unified",
@@ -269,7 +310,8 @@ with st.expander("Sobre os dados e a metodologia"):
         "O spread é recalculado para cada data e ativo usando apenas as corretoras "
         "selecionadas: a diferença entre o maior e o menor spread em relação à "
         "referência. Assim, adicionar ou remover corretoras atualiza os indicadores, "
-        "o gráfico e a lista de destaques. "
+        "o gráfico e a lista de destaques. O regime de mercado aparece na legenda "
+        "e ao passar o cursor sobre o gráfico. "
         "Um spread positivo não garante uma oportunidade executável ou lucrativa "
         "após taxas, slippage, liquidez e latência."
     )
