@@ -39,6 +39,21 @@ st.markdown(
     [data-testid="stMainMenuItem-theme-System"] {
         display: none !important;
     }
+    .st-key-dashboard_controls {
+        position: fixed !important;
+        top: 0.45rem;
+        right: 9.5rem;
+        z-index: 999991;
+        width: auto !important;
+    }
+    .st-key-dashboard_controls [data-testid="stPopover"] > button {
+        min-height: 2rem;
+        padding: 0 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: 0.6rem;
+        background: light-dark(#f3f7fa, #101a26);
+        color: var(--text);
+    }
     [data-testid="stSidebar"] {
         background: linear-gradient(
             180deg,
@@ -249,7 +264,8 @@ st.markdown(
         [data-testid="stToolbar"],
         [data-testid="stStatusWidget"],
         [data-testid="stElementToolbar"],
-        [data-testid="stMainMenu"] {
+        [data-testid="stMainMenu"],
+        .st-key-dashboard_controls {
             display: none !important;
         }
         [data-testid="stAppViewContainer"],
@@ -404,6 +420,19 @@ def _auto_refresh():
     st.rerun()
 
 
+with st.container(key="dashboard_controls"):
+    with st.popover("⋮"):
+        st.button("Rerun", key="dashboard_rerun", use_container_width=True)
+        auto_refresh = st.toggle("Auto rerun (10 s)", key="dashboard_auto_refresh")
+        if st.button("Clear cache", key="dashboard_clear_cache", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
+
+if auto_refresh:
+    st.session_state["_auto_refresh_skip_first"] = True
+    _auto_refresh()
+
+
 try:
     df = carregar_dados()
 except FileNotFoundError:
@@ -459,17 +488,6 @@ periodo = st.sidebar.date_input(
     max_value=data_maxima,
     format="DD/MM/YYYY",
 )
-
-with st.sidebar.expander("Controles do dashboard"):
-    st.button("Rerun", key="dashboard_rerun", use_container_width=True)
-    auto_refresh = st.toggle("Auto rerun (10 s)", key="dashboard_auto_refresh")
-    if st.button("Clear cache", key="dashboard_clear_cache", use_container_width=True):
-        st.cache_data.clear()
-        st.rerun()
-
-if auto_refresh:
-    st.session_state["_auto_refresh_skip_first"] = True
-    _auto_refresh()
 
 if len(periodo) == 2:
     inicio, fim = periodo
