@@ -58,11 +58,32 @@ st.markdown(
         border-color: light-dark(rgba(8, 127, 105, 0.4), rgba(101, 240, 194, 0.5));
         color: var(--mint);
     }
+    .st-key-dashboard_controls_dismiss {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 999992;
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+    .st-key-dashboard_controls_dismiss [data-testid="stBaseButton-secondary"] {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: transparent;
+        box-shadow: none;
+        cursor: default;
+    }
     .st-key-dashboard_controls_panel {
         position: absolute !important;
         top: 2.75rem;
         right: 0;
-        z-index: 999992;
+        z-index: 999993;
         width: 15rem !important;
         max-width: min(15rem, calc(100vw - 2rem)) !important;
         padding: 0.8rem !important;
@@ -482,13 +503,21 @@ with st.container(key="dashboard_controls"):
         st.session_state["dashboard_controls_open"] = controls_open
 
     if controls_open:
+        if st.button(
+            "Fechar controles",
+            key="dashboard_controls_dismiss",
+        ):
+            st.session_state["dashboard_controls_open"] = False
+            st.rerun()
+
         with st.container(key="dashboard_controls_panel"):
             st.caption("AÇÕES DO PAINEL")
             st.button("Atualizar agora", key="dashboard_rerun", use_container_width=True)
             auto_refresh = st.toggle(
-                "Auto rerun (10 s)",
+                "Auto atualizar (10 s)",
                 key="dashboard_auto_refresh",
             )
+            st.caption("Reexecuta o painel; os dados continuam históricos.")
             if st.button("Limpar cache", key="dashboard_clear_cache", use_container_width=True):
                 st.cache_data.clear()
                 st.rerun()
