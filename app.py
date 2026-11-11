@@ -42,15 +42,17 @@ st.markdown(
     .st-key-dashboard_controls {
         position: fixed !important;
         top: 0.45rem;
-        right: 7rem;
+        right: 3.4rem;
         z-index: 999991;
         width: auto !important;
     }
     .st-key-dashboard_controls_toggle [data-testid="stBaseButton-secondary"] {
+        width: 2.25rem;
+        min-width: 2.25rem;
         min-height: 2rem;
-        padding: 0 0.8rem;
-        border: 1px solid light-dark(rgba(55, 75, 96, 0.16), rgba(148, 163, 184, 0.2));
-        border-radius: 999px;
+        padding: 0;
+        border: 1px solid light-dark(rgba(55, 75, 96, 0.2), rgba(148, 163, 184, 0.22));
+        border-radius: 0.65rem;
         background: light-dark(#f3f7fa, #101a26);
         color: var(--text);
     }
@@ -453,6 +455,18 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+def reiniciar_painel():
+    st.cache_data.clear()
+    for key in (
+        "filter_exchanges",
+        "filter_pairs",
+        "filter_regimes",
+        "filter_period",
+    ):
+        st.session_state.pop(key, None)
+    st.session_state["dashboard_auto_refresh"] = False
+    st.session_state["dashboard_controls_open"] = False
+
 
 @st.cache_data
 def carregar_dados():
@@ -495,9 +509,8 @@ with st.container(key="dashboard_controls"):
     controls_open = st.session_state.get("dashboard_controls_open", False)
     auto_refresh = st.session_state.get("dashboard_auto_refresh", False)
     if st.button(
-        "Controles",
+        "⚙️",
         key="dashboard_controls_toggle",
-        icon=":material/tune:",
     ):
         controls_open = not controls_open
         st.session_state["dashboard_controls_open"] = controls_open
@@ -518,9 +531,12 @@ with st.container(key="dashboard_controls"):
                 key="dashboard_auto_refresh",
             )
             st.caption("Reexecuta o painel; os dados continuam históricos.")
-            if st.button("Limpar cache", key="dashboard_clear_cache", use_container_width=True):
-                st.cache_data.clear()
-                st.rerun()
+            st.button(
+                "Reiniciar painel",
+                key="dashboard_clear_cache",
+                use_container_width=True,
+                on_click=reiniciar_painel,
+            )
 
 if auto_refresh:
     st.session_state["_auto_refresh_skip_first"] = True
@@ -557,6 +573,7 @@ corretoras_selecionadas = st.sidebar.multiselect(
     "Corretoras",
     options=corretoras_disponiveis,
     default=corretoras_disponiveis,
+    key="filter_exchanges",
 )
 
 pares_disponiveis = sorted(df["Par / Cripto"].dropna().unique().tolist())
@@ -564,6 +581,7 @@ pares_selecionados = st.sidebar.multiselect(
     "Pares",
     options=pares_disponiveis,
     default=pares_disponiveis,
+    key="filter_pairs",
 )
 
 regimes_disponiveis = sorted(df["Regime de Mercado"].dropna().unique().tolist())
@@ -571,6 +589,7 @@ regimes_selecionados = st.sidebar.multiselect(
     "Regimes de mercado",
     options=regimes_disponiveis,
     default=regimes_disponiveis,
+    key="filter_regimes",
 )
 
 data_minima = df["Data / Hora"].min().date()
@@ -581,6 +600,7 @@ periodo = st.sidebar.date_input(
     min_value=data_minima,
     max_value=data_maxima,
     format="DD/MM/YYYY",
+    key="filter_period",
 )
 
 if len(periodo) == 2:

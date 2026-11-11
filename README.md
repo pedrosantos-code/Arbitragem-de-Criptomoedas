@@ -33,7 +33,7 @@ Este dashboard resolve esse problema transformando microestrutura de mercado bru
 * **Interface responsiva:** Layout adaptado para ecrãs de computador e dispositivos móveis.
 * **Tema adaptável:** A identidade visual premium acompanha os modos claro e escuro do Streamlit.
 * **Impressão:** Layout próprio para imprimir ou guardar como PDF, com filtros selecionados, indicadores, gráficos e destaques.
-* **Controles do dashboard:** Menu no topo com atualização manual, atualização automática a cada 10 segundos e limpeza de cache; o painel fecha ao clicar fora. A atualização automática reexecuta a tela, sem transformar os dados históricos em dados em tempo real.
+* **Controles do dashboard:** Ícone compacto no topo com atualização manual, atualização automática a cada 10 segundos e reinício do painel. Reiniciar limpa o cache e restaura os filtros aos valores padrão; o painel fecha ao clicar fora.
 * **Tratamento de dados:** Conversão de datas e valores numéricos para suportar filtros e gráficos consistentes.
 
 > Os dados são históricos; o spread é recalculado entre as corretoras selecionadas, e não inclui taxas, slippage ou outros custos. Não garante oportunidades executáveis ou lucro.
