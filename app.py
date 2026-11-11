@@ -42,17 +42,67 @@ st.markdown(
     .st-key-dashboard_controls {
         position: fixed !important;
         top: 0.45rem;
-        right: 9.5rem;
+        right: 7rem;
         z-index: 999991;
         width: auto !important;
     }
-    .st-key-dashboard_controls [data-testid="stPopover"] > button {
+    .st-key-dashboard_controls_toggle [data-testid="stBaseButton-secondary"] {
         min-height: 2rem;
-        padding: 0 0.7rem;
-        border: 1px solid var(--border);
-        border-radius: 0.6rem;
+        padding: 0 0.8rem;
+        border: 1px solid light-dark(rgba(55, 75, 96, 0.16), rgba(148, 163, 184, 0.2));
+        border-radius: 999px;
         background: light-dark(#f3f7fa, #101a26);
         color: var(--text);
+    }
+    .st-key-dashboard_controls_toggle [data-testid="stBaseButton-secondary"]:hover {
+        border-color: light-dark(rgba(8, 127, 105, 0.4), rgba(101, 240, 194, 0.5));
+        color: var(--mint);
+    }
+    .st-key-dashboard_controls_panel {
+        position: absolute !important;
+        top: 2.75rem;
+        right: 0;
+        z-index: 999992;
+        width: 15rem !important;
+        max-width: min(15rem, calc(100vw - 2rem)) !important;
+        padding: 0.8rem !important;
+        border: 1px solid light-dark(rgba(55, 75, 96, 0.14), rgba(148, 163, 184, 0.18)) !important;
+        border-radius: 16px !important;
+        background: light-dark(#ffffff, #111a27) !important;
+        box-shadow: 0 16px 40px rgba(8, 15, 28, 0.2) !important;
+    }
+    .st-key-dashboard_controls_panel [data-testid="stVerticalBlock"] {
+        gap: 0.55rem;
+    }
+    .st-key-dashboard_controls_panel [data-testid="stBaseButton-secondary"] {
+        min-height: 2.45rem;
+        border: 1px solid light-dark(rgba(55, 75, 96, 0.14), rgba(148, 163, 184, 0.2));
+        border-radius: 10px;
+        background: light-dark(#f3f7fa, #182333);
+        color: var(--text);
+        transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+    }
+    .st-key-dashboard_controls_panel [data-testid="stBaseButton-secondary"]:hover {
+        border-color: light-dark(rgba(8, 127, 105, 0.42), rgba(101, 240, 194, 0.48));
+        background: light-dark(#e8f5f1, #1a302f);
+        transform: translateY(-1px);
+    }
+    .st-key-dashboard_controls_panel .st-key-dashboard_rerun [data-testid="stBaseButton-secondary"] {
+        border-color: light-dark(#087f69, #65f0c2);
+        background: light-dark(#087f69, #65f0c2);
+        color: light-dark(#ffffff, #07120f);
+        font-weight: 650;
+    }
+    .st-key-dashboard_controls_panel .st-key-dashboard_rerun [data-testid="stBaseButton-secondary"]:hover {
+        background: light-dark(#066b59, #86f5d0);
+    }
+    .st-key-dashboard_controls_panel [data-testid="stCheckbox"] label {
+        min-height: 2.3rem;
+        padding: 0 0.25rem;
+        color: var(--text);
+    }
+    .st-key-dashboard_controls_panel [data-testid="stCheckbox"] input {
+        accent-color: light-dark(#087f69, #65f0c2);
     }
     [data-testid="stSidebar"] {
         background: linear-gradient(
@@ -421,12 +471,27 @@ def _auto_refresh():
 
 
 with st.container(key="dashboard_controls"):
-    with st.popover("⋮"):
-        st.button("Rerun", key="dashboard_rerun", use_container_width=True)
-        auto_refresh = st.toggle("Auto rerun (10 s)", key="dashboard_auto_refresh")
-        if st.button("Clear cache", key="dashboard_clear_cache", use_container_width=True):
-            st.cache_data.clear()
-            st.rerun()
+    controls_open = st.session_state.get("dashboard_controls_open", False)
+    auto_refresh = st.session_state.get("dashboard_auto_refresh", False)
+    if st.button(
+        "Controles",
+        key="dashboard_controls_toggle",
+        icon=":material/tune:",
+    ):
+        controls_open = not controls_open
+        st.session_state["dashboard_controls_open"] = controls_open
+
+    if controls_open:
+        with st.container(key="dashboard_controls_panel"):
+            st.caption("AÇÕES DO PAINEL")
+            st.button("Atualizar agora", key="dashboard_rerun", use_container_width=True)
+            auto_refresh = st.toggle(
+                "Auto rerun (10 s)",
+                key="dashboard_auto_refresh",
+            )
+            if st.button("Limpar cache", key="dashboard_clear_cache", use_container_width=True):
+                st.cache_data.clear()
+                st.rerun()
 
 if auto_refresh:
     st.session_state["_auto_refresh_skip_first"] = True
