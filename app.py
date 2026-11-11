@@ -74,7 +74,7 @@ st.markdown(
     [data-testid="stSidebar"] [data-testid="stDateInputField"],
     [data-testid="stSidebar"] div[data-baseweb="select"] > div,
     [data-testid="stSidebar"] div[data-baseweb="input"] > div {
-        background: light-dark(#e8f5f1, #18382f) !important;
+        background: light-dark(#e8f5f1, #101a26) !important;
         border-color: light-dark(rgba(8, 127, 105, 0.22), rgba(101, 240, 194, 0.32)) !important;
         border-radius: 10px !important;
     }
