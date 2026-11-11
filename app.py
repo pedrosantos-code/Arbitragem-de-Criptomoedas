@@ -397,6 +397,13 @@ def carregar_dados():
     return df.dropna(subset=["Data / Hora", "Spread Máximo (bps)"])
 
 
+@st.fragment(run_every="10s")
+def _auto_refresh():
+    if st.session_state.pop("_auto_refresh_skip_first", False):
+        return
+    st.rerun()
+
+
 try:
     df = carregar_dados()
 except FileNotFoundError:
@@ -452,6 +459,17 @@ periodo = st.sidebar.date_input(
     max_value=data_maxima,
     format="DD/MM/YYYY",
 )
+
+with st.sidebar.expander("Controles do dashboard"):
+    st.button("Rerun", key="dashboard_rerun", use_container_width=True)
+    auto_refresh = st.toggle("Auto rerun (10 s)", key="dashboard_auto_refresh")
+    if st.button("Clear cache", key="dashboard_clear_cache", use_container_width=True):
+        st.cache_data.clear()
+        st.rerun()
+
+if auto_refresh:
+    st.session_state["_auto_refresh_skip_first"] = True
+    _auto_refresh()
 
 if len(periodo) == 2:
     inicio, fim = periodo
