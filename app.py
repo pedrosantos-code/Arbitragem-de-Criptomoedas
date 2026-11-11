@@ -15,64 +15,176 @@ st.markdown(
     <style>
     :root {
         color-scheme: dark;
+        --canvas: #080b12;
+        --surface: rgba(17, 24, 39, 0.88);
+        --border: rgba(148, 163, 184, 0.14);
+        --muted: #91a0b5;
+        --text: #e8eef7;
+        --mint: #65f0c2;
     }
-    .stApp,
-    [data-testid="stAppViewContainer"] {
-        background: #0f172a;
-        color: #e2e8f0;
+    html, body, [class*="css"] {
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .stApp {
+        background:
+            radial-gradient(ellipse at 10% 0%, rgba(35, 91, 107, 0.18), transparent 34rem),
+            radial-gradient(ellipse at 92% 8%, rgba(67, 56, 142, 0.16), transparent 30rem),
+            var(--canvas);
+        color: var(--text);
     }
     [data-testid="stHeader"] {
-        background: rgba(15, 23, 42, 0.9);
+        background: rgba(8, 11, 18, 0.72);
+        backdrop-filter: blur(14px);
     }
     [data-testid="stSidebar"] {
-        background: #111c31;
+        background: linear-gradient(180deg, #0d1420 0%, #0a1019 100%);
+        border-right: 1px solid var(--border);
     }
     [data-testid="stSidebar"] * {
-        color: #e2e8f0;
+        color: var(--text);
     }
     .block-container {
-        max-width: 1440px;
-        padding-top: 2rem;
-        padding-bottom: 3rem;
+        max-width: 1520px;
+        padding-top: 2.2rem;
+        padding-bottom: 4rem;
+    }
+    .hero-card {
+        position: relative;
+        overflow: hidden;
+        padding: 2rem 2.15rem;
+        margin-bottom: 1.6rem;
+        border: 1px solid rgba(148, 163, 184, 0.17);
+        border-radius: 22px;
+        background:
+            radial-gradient(ellipse at 83% 18%, rgba(101, 240, 194, 0.15), transparent 24rem),
+            linear-gradient(112deg, rgba(18, 29, 42, 0.98), rgba(13, 19, 31, 0.94) 56%, rgba(20, 25, 43, 0.94));
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+    }
+    .hero-card:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 12%;
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(transparent, rgba(101, 240, 194, 0.28), transparent);
+        transform: rotate(28deg);
+    }
+    .hero-kicker, .section-kicker {
+        color: var(--mint);
+        font-size: 0.7rem;
+        font-weight: 750;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+    .hero-title {
+        margin: 0.65rem 0 0.45rem;
+        color: #f5f8fc;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 720;
+        letter-spacing: -0.055em;
+        line-height: 1.08;
+    }
+    .hero-copy {
+        max-width: 680px;
+        margin: 0;
+        color: #a9b7c8;
+        font-size: 0.98rem;
+        line-height: 1.65;
+    }
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1.2rem;
+        padding: 0.45rem 0.72rem;
+        border: 1px solid rgba(101, 240, 194, 0.22);
+        border-radius: 999px;
+        background: rgba(101, 240, 194, 0.07);
+        color: #b7f7e1;
+        font-size: 0.72rem;
+        font-weight: 650;
+        letter-spacing: 0.04em;
+    }
+    .hero-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--mint);
+        box-shadow: 0 0 12px rgba(101, 240, 194, 0.8);
+    }
+    .section-heading {
+        margin: 1.4rem 0 0.2rem;
+        color: #f2f6fb;
+        font-size: 1.16rem;
+        font-weight: 680;
+        letter-spacing: -0.025em;
     }
     [data-testid="stMetric"] {
-        background: #172338;
-        border: 1px solid #29374d;
-        border-radius: 12px;
-        padding: 1rem 1.1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+        min-height: 122px;
+        background: linear-gradient(145deg, rgba(21, 31, 46, 0.96), rgba(13, 20, 31, 0.92));
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.05rem 1.15rem;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+        transition: border-color 160ms ease, transform 160ms ease;
+    }
+    [data-testid="stMetric"]:hover {
+        border-color: rgba(101, 240, 194, 0.34);
+        transform: translateY(-2px);
     }
     [data-testid="stMetricLabel"] {
-        color: #aab7c8;
+        color: #9cacc0;
+        font-size: 0.82rem;
     }
     [data-testid="stMetricValue"] {
-        color: #f8fafc;
+        color: #f2f7fb;
+        font-size: 1.5rem;
+        font-weight: 680;
     }
     [data-testid="stDataFrame"] {
-        border: 1px solid #29374d;
-        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 14px;
     }
     div[data-baseweb="select"] > div,
     div[data-baseweb="input"] > div {
-        background: #172338;
-        border-color: #3b4b63;
+        background: #121b29;
+        border-color: #29374a;
+        border-radius: 10px;
     }
     input,
     textarea {
         color-scheme: dark;
     }
-    [data-testid="stCaption"] {
-        color: #aab7c8;
+    [data-testid="stCaption"], .stMarkdown p {
+        color: #9cacc0;
+    }
+    [data-testid="stExpander"] {
+        border-color: var(--border);
+        border-radius: 14px;
+        background: rgba(16, 23, 35, 0.55);
+    }
+    [data-testid="stAlert"] {
+        border-radius: 12px;
     }
     @media (max-width: 640px) {
         .block-container {
-            padding: 1.25rem 1rem 2rem;
+            padding: 1rem 0.85rem 2.25rem;
         }
-        h1 {
-            font-size: 1.7rem !important;
+        .hero-card {
+            padding: 1.45rem 1.25rem;
+            border-radius: 17px;
+        }
+        .hero-title {
+            font-size: 2rem;
         }
         [data-testid="stMetric"] {
+            min-height: 108px;
             padding: 0.8rem;
+        }
+        [data-testid="stMetricValue"] {
+            font-size: 1.15rem;
         }
     }
     </style>
@@ -118,13 +230,23 @@ except FileNotFoundError:
     st.info("Confirme se o arquivo está na pasta `data/` do projeto.")
     st.stop()
 
-st.title("📈 Radar de spreads")
-st.caption(
-    "Explore diferenças históricas de preços entre corretoras. "
-    "Os spreads são brutos e não incluem taxas, slippage ou custos de saque."
+st.markdown(
+    """
+    <section class="hero-card">
+      <div class="hero-kicker">Market intelligence · cripto</div>
+      <h1 class="hero-title">Radar de spreads</h1>
+      <p class="hero-copy">
+        Compare diferenças históricas de preços entre corretoras e entenda
+        como os spreads mudam conforme o ativo e o regime de mercado.
+      </p>
+      <span class="hero-badge"><span class="hero-dot"></span> ANÁLISE HISTÓRICA · SEM DADOS EM TEMPO REAL</span>
+    </section>
+    """,
+    unsafe_allow_html=True,
 )
 
-st.sidebar.header("🎛️ Filtros")
+st.sidebar.markdown("## Filtros")
+st.sidebar.caption("Ajuste o recorte para explorar o histórico.")
 
 corretoras_disponiveis = sorted(df["Corretora"].dropna().unique().tolist())
 corretoras_selecionadas = st.sidebar.multiselect(
@@ -169,47 +291,55 @@ df_filtrado = df[
     & df["Data / Hora"].dt.date.between(inicio, fim)
 ]
 
-spreads_por_ativo = (
-    df_filtrado.groupby(["Data / Hora", "Par / Cripto"], as_index=False)
-    .agg(
-        spread_minimo=("Spread de Referência (bps)", "min"),
-        spread_maximo=("Spread de Referência (bps)", "max"),
-        **{
-            "Regime de Mercado": ("Regime de Mercado", "first"),
-            "Estresse de Mercado?": ("Estresse de Mercado?", "max"),
-        },
+comparacao_valida = len(corretoras_selecionadas) >= 2
+if comparacao_valida:
+    spreads_por_ativo = (
+        df_filtrado.groupby(["Data / Hora", "Par / Cripto"], as_index=False)
+        .agg(
+            spread_minimo=("Spread de Referência (bps)", "min"),
+            spread_maximo=("Spread de Referência (bps)", "max"),
+            **{
+                "Regime de Mercado": ("Regime de Mercado", "first"),
+                "Estresse de Mercado?": ("Estresse de Mercado?", "max"),
+            },
+        )
     )
-)
-spreads_por_ativo["Spread Máximo (bps)"] = (
-    spreads_por_ativo["spread_maximo"] - spreads_por_ativo["spread_minimo"]
-)
+    spreads_por_ativo["Spread Máximo (bps)"] = (
+        spreads_por_ativo["spread_maximo"] - spreads_por_ativo["spread_minimo"]
+    )
+else:
+    spreads_por_ativo = pd.DataFrame()
 
+st.markdown(
+    '<div class="section-kicker">Visão geral</div>'
+    '<div class="section-heading">Resumo do período</div>',
+    unsafe_allow_html=True,
+)
 st.caption(
-    f"Período analisado: {inicio:%d/%m/%Y} – {fim:%d/%m/%Y} · "
-    f"{len(df_filtrado):,} registros".replace(",", ".")
+    f"{inicio:%d/%m/%Y} — {fim:%d/%m/%Y} · "
+    f"{len(corretoras_selecionadas)} corretoras · "
+    f"{len(df_filtrado):,} observações".replace(",", ".")
 )
-if len(corretoras_selecionadas) < 2:
-    st.info("Selecione pelo menos duas corretoras para comparar spreads.")
-
-st.subheader("Resumo do período")
 col1, col2, col3, col4 = st.columns(4)
+eventos_estresse = df_filtrado.loc[
+    df_filtrado["Estresse de Mercado?"],
+    ["Data / Hora", "Par / Cripto"],
+].drop_duplicates()
 
 if spreads_por_ativo.empty:
     with col1:
-        st.metric("Maior spread bruto", "—")
+        st.metric("Maior spread bruto", "—", help="Exige ao menos duas corretoras.")
     with col2:
         st.metric("Spread médio", "—")
     with col3:
-        st.metric("Registros", "0")
+        st.metric("Registros", f"{len(df_filtrado):,}".replace(",", "."))
     with col4:
-        st.metric("Eventos de estresse", "0")
-    st.info("Nenhum dado encontrado para os filtros selecionados.")
+        st.metric("Eventos de estresse", f"{len(eventos_estresse):,}".replace(",", "."))
+    if not comparacao_valida:
+        st.info("Selecione pelo menos duas corretoras para calcular spreads comparáveis.")
+    else:
+        st.info("Nenhum dado encontrado para os filtros selecionados.")
 else:
-    eventos_estresse = df_filtrado.loc[
-        df_filtrado["Estresse de Mercado?"],
-        ["Data / Hora", "Par / Cripto"],
-    ].drop_duplicates()
-
     with col1:
         st.metric(
             "Maior spread bruto",
@@ -225,7 +355,15 @@ else:
     with col4:
         st.metric("Eventos de estresse", f"{len(eventos_estresse):,}".replace(",", "."))
 
-    st.subheader("Evolução dos spreads")
+    st.markdown(
+        '<div class="section-kicker">Série temporal</div>'
+        '<div class="section-heading">Como o spread evoluiu</div>',
+        unsafe_allow_html=True,
+    )
+    st.caption(
+        "Diferença entre as referências das corretoras selecionadas, por ativo. "
+        "A linha pontilhada mostra a média do recorte."
+    )
     serie_temporal = spreads_por_ativo[
         [
             "Data / Hora",
@@ -235,42 +373,100 @@ else:
         ]
     ]
     media_periodo = serie_temporal["Spread Máximo (bps)"].mean()
-    fig = px.line(
-        serie_temporal,
-        x="Data / Hora",
-        y="Spread Máximo (bps)",
-        color="Par / Cripto",
-        line_dash="Regime de Mercado",
-        hover_data=["Regime de Mercado"],
-        labels={
-            "Data / Hora": "Data",
-            "Spread Máximo (bps)": "Spread bruto (bps)",
-            "Par / Cripto": "Ativo",
-            "Regime de Mercado": "Regime",
-        },
-        color_discrete_sequence=["#2563eb", "#14b8a6"],
-    )
-    fig.add_hline(
-        y=media_periodo,
-        line_dash="dot",
-        line_color="#94a3b8",
-        annotation_text="Média do período",
-        annotation_position="top left",
-    )
-    fig.update_layout(
-        template="plotly_dark",
-        height=390,
-        margin=dict(l=8, r=8, t=24, b=8),
-        hovermode="x unified",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    )
-    st.plotly_chart(
-        fig,
-        width="stretch",
-        config={"responsive": True, "displaylogo": False},
-    )
+    grafico_col, ativos_col = st.columns([1.8, 1], gap="large")
+    with grafico_col:
+        fig = px.line(
+            serie_temporal,
+            x="Data / Hora",
+            y="Spread Máximo (bps)",
+            color="Par / Cripto",
+            line_dash="Regime de Mercado",
+            hover_data=["Regime de Mercado"],
+            labels={
+                "Data / Hora": "Data",
+                "Spread Máximo (bps)": "Spread bruto (bps)",
+                "Par / Cripto": "Ativo",
+                "Regime de Mercado": "Regime",
+            },
+            color_discrete_sequence=["#65f0c2", "#8b9bff", "#ffba75"],
+        )
+        fig.add_hline(
+            y=media_periodo,
+            line_dash="dot",
+            line_color="#9aa9bd",
+            annotation_text="Média",
+            annotation_position="top left",
+        )
+        fig.update_layout(
+            template="plotly_dark",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(family="Inter, sans-serif", color="#a9b7c8", size=11),
+            height=420,
+            margin=dict(l=8, r=8, t=32, b=8),
+            hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+            xaxis=dict(showgrid=False, zeroline=False, title=None),
+            yaxis=dict(gridcolor="rgba(148,163,184,0.12)", zeroline=False, title=None),
+        )
+        st.plotly_chart(
+            fig,
+            width="stretch",
+            config={"responsive": True, "displaylogo": False},
+        )
 
-    st.subheader("Maiores spreads observados")
+    with ativos_col:
+        st.markdown(
+            '<div class="section-kicker">Comparativo</div>'
+            '<div class="section-heading">Pico por ativo</div>',
+            unsafe_allow_html=True,
+        )
+        st.caption("Maior spread observado no período, em bps.")
+        picos_por_ativo = (
+            spreads_por_ativo.groupby("Par / Cripto", as_index=False)
+            .agg(pico=("Spread Máximo (bps)", "max"))
+            .sort_values("pico", ascending=True)
+        )
+        fig_ativos = px.bar(
+            picos_por_ativo,
+            x="pico",
+            y="Par / Cripto",
+            orientation="h",
+            text="pico",
+            labels={"pico": "Pico do spread (bps)", "Par / Cripto": "Ativo"},
+            color="pico",
+            color_continuous_scale=["#41506c", "#65f0c2"],
+        )
+        fig_ativos.update_traces(
+            texttemplate="%{text:.2f}",
+            textposition="outside",
+            cliponaxis=False,
+            marker_line_width=0,
+        )
+        fig_ativos.update_layout(
+            template="plotly_dark",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(family="Inter, sans-serif", color="#a9b7c8", size=11),
+            height=290,
+            margin=dict(l=8, r=38, t=32, b=8),
+            showlegend=False,
+            coloraxis_showscale=False,
+            xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.12)", title=None),
+            yaxis=dict(showgrid=False, title=None),
+        )
+        st.plotly_chart(
+            fig_ativos,
+            width="stretch",
+            config={"responsive": True, "displaylogo": False},
+        )
+
+    st.markdown(
+        '<div class="section-kicker">Destaques históricos</div>'
+        '<div class="section-heading">Maiores spreads observados</div>',
+        unsafe_allow_html=True,
+    )
+    st.caption("Os maiores valores do recorte selecionado; não representam lucro líquido.")
     melhores_spreads = (
         spreads_por_ativo.sort_values("Spread Máximo (bps)", ascending=False)
         .loc[
