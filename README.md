@@ -31,7 +31,8 @@ Este dashboard resolve esse problema transformando microestrutura de mercado bru
 * **Indicadores do período:** Maior e médio spread bruto, volume de registos e eventos de estresse sem duplicar observações.
 * **Destaques históricos:** Tabela com os maiores spreads observados no recorte selecionado.
 * **Interface responsiva:** Layout adaptado para ecrãs de computador e dispositivos móveis.
-* **Tema adaptável:** A identidade visual premium acompanha os modos claro, escuro e sistema do Streamlit.
+* **Tema adaptável:** A identidade visual premium acompanha os modos claro e escuro do Streamlit.
+* **Impressão:** Layout próprio para imprimir ou guardar como PDF, com filtros selecionados, indicadores, gráficos e destaques.
 * **Tratamento de dados:** Conversão de datas e valores numéricos para suportar filtros e gráficos consistentes.
 
 > Os dados são históricos; o spread é recalculado entre as corretoras selecionadas, e não inclui taxas, slippage ou outros custos. Não garante oportunidades executáveis ou lucro.

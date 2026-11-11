@@ -1,3 +1,4 @@
+import html
 from pathlib import Path
 
 import pandas as pd
@@ -27,6 +28,9 @@ st.markdown(
             radial-gradient(ellipse at 92% 8%, light-dark(rgba(91, 93, 180, 0.09), rgba(67, 56, 142, 0.16)), transparent 30rem),
             var(--canvas);
         color: var(--text);
+    }
+    .print-filter-summary {
+        display: none;
     }
     [data-testid="stHeader"] {
         background: light-dark(rgba(243, 246, 248, 0.82), rgba(8, 11, 18, 0.72));
@@ -196,6 +200,131 @@ st.markdown(
     [data-testid="stAlert"] {
         border-radius: 12px;
     }
+    @page {
+        size: A4 portrait;
+        margin: 14mm;
+    }
+    @media print {
+        html,
+        body {
+            height: auto !important;
+            min-height: 0 !important;
+            color-scheme: light !important;
+            background: #ffffff !important;
+            color: #172435 !important;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+        .stApp {
+            --canvas: #ffffff;
+            --border: #d7dee7;
+            --muted: #526174;
+            --text: #172435;
+            --mint: #087f69;
+            height: auto !important;
+            min-height: 0 !important;
+            color-scheme: light !important;
+            background: #ffffff !important;
+            color: #172435 !important;
+        }
+        [data-testid="stHeader"],
+        [data-testid="stSidebar"],
+        [data-testid="stToolbar"],
+        [data-testid="stStatusWidget"],
+        [data-testid="stElementToolbar"],
+        [data-testid="stMainMenu"] {
+            display: none !important;
+        }
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stMainBlockContainer"],
+        [data-testid="stScreencast"] {
+            height: auto !important;
+            max-height: none !important;
+            min-height: 0 !important;
+            overflow: visible !important;
+            background: #ffffff !important;
+            color: #172435 !important;
+        }
+        .block-container {
+            width: 100% !important;
+            max-width: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .hero-card,
+        [data-testid="stMetric"],
+        [data-testid="stExpander"] {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            background: #ffffff !important;
+            border-color: #d7dee7 !important;
+            box-shadow: none !important;
+            color: #172435 !important;
+        }
+        .hero-card:after {
+            display: none;
+        }
+        .hero-title,
+        .section-heading,
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricLabel"],
+        .hero-copy,
+        .hero-kicker,
+        .section-kicker,
+        .hero-badge,
+        [data-testid="stCaption"],
+        .stMarkdown p {
+            color: #172435 !important;
+        }
+        .hero-kicker,
+        .section-kicker {
+            color: #087f69 !important;
+        }
+        .hero-badge {
+            background: #eef8f5 !important;
+            border-color: #b7ddd2 !important;
+        }
+        .print-filter-summary {
+            display: block !important;
+            margin: 0 0 1rem;
+            padding: 0.65rem 0.8rem;
+            border: 1px solid #d7dee7;
+            border-radius: 8px;
+            color: #172435 !important;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        [data-testid="stMetric"] {
+            min-height: 0 !important;
+            padding: 0.75rem !important;
+        }
+        [data-testid="stPlotlyChart"],
+        [data-testid="stDataFrame"],
+        .js-plotly-plot {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            max-width: 100% !important;
+            box-shadow: none !important;
+        }
+        [data-testid="stColumn"]:has(.js-plotly-plot) {
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+        }
+        .js-plotly-plot text {
+            fill: #334155 !important;
+        }
+        .js-plotly-plot .gridlayer path {
+            stroke: #d7dee7 !important;
+        }
+        .js-plotly-plot .barlayer path {
+            fill: #087f69 !important;
+        }
+        .js-plotly-plot .modebar-container {
+            display: none !important;
+        }
+    }
     @media (max-width: 640px) {
         .block-container {
             padding: 1rem 0.85rem 2.25rem;
@@ -347,6 +476,16 @@ st.caption(
     f"{inicio:%d/%m/%Y} — {fim:%d/%m/%Y} · "
     f"{len(corretoras_selecionadas)} corretoras · "
     f"{len(df_filtrado):,} observações".replace(",", ".")
+)
+filtros_impressao = (
+    f"<strong>Corretoras:</strong> {html.escape(', '.join(corretoras_selecionadas) or 'Nenhuma')} &nbsp;·&nbsp; "
+    f"<strong>Pares:</strong> {html.escape(', '.join(pares_selecionados) or 'Nenhum')} &nbsp;·&nbsp; "
+    f"<strong>Regimes:</strong> {html.escape(', '.join(regimes_selecionados) or 'Nenhum')} &nbsp;·&nbsp; "
+    f"<strong>Período:</strong> {inicio:%d/%m/%Y} — {fim:%d/%m/%Y}"
+)
+st.markdown(
+    f'<div class="print-filter-summary">{filtros_impressao}</div>',
+    unsafe_allow_html=True,
 )
 col1, col2, col3, col4 = st.columns(4)
 eventos_estresse = df_filtrado.loc[
