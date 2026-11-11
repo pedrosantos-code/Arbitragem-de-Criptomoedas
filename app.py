@@ -60,6 +60,16 @@ st.markdown(
         color: light-dark(#086c59, #b7f7e1) !important;
         fill: currentColor;
     }
+    [data-testid="stSidebar"] [data-testid="stMultiSelectTagsContainer"] [data-tag] {
+        background-color: light-dark(rgba(8, 127, 105, 0.07), rgba(101, 240, 194, 0.07)) !important;
+        border: 1px solid light-dark(rgba(8, 127, 105, 0.22), rgba(101, 240, 194, 0.22)) !important;
+        border-radius: 999px !important;
+        color: light-dark(#086c59, #b7f7e1) !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stMultiSelectTagsContainer"] [data-tag] button {
+        background: transparent !important;
+        color: inherit !important;
+    }
     .block-container {
         max-width: 1520px;
         padding-top: 2.2rem;
