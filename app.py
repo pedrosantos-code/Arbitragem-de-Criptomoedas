@@ -70,6 +70,14 @@ st.markdown(
         background: transparent !important;
         color: inherit !important;
     }
+    [data-testid="stSidebar"] [data-testid="stMultiSelect"] [role="group"]:has(> [data-testid="stMultiSelectTagsContainer"]),
+    [data-testid="stSidebar"] [data-testid="stDateInputField"],
+    [data-testid="stSidebar"] div[data-baseweb="select"] > div,
+    [data-testid="stSidebar"] div[data-baseweb="input"] > div {
+        background: light-dark(#e8f5f1, #18382f) !important;
+        border-color: light-dark(rgba(8, 127, 105, 0.22), rgba(101, 240, 194, 0.32)) !important;
+        border-radius: 10px !important;
+    }
     .block-container {
         max-width: 1520px;
         padding-top: 2.2rem;
@@ -185,7 +193,6 @@ st.markdown(
     }
     div[data-baseweb="select"] > div,
     div[data-baseweb="input"] > div {
-        background: light-dark(#ffffff, #121b29);
         border-color: light-dark(#c6d0dc, #29374a);
         border-radius: 10px;
     }
