@@ -39,94 +39,6 @@ st.markdown(
     [data-testid="stMainMenuItem-theme-System"] {
         display: none !important;
     }
-    .st-key-dashboard_controls {
-        position: fixed !important;
-        top: 0.45rem;
-        right: 3.4rem;
-        z-index: 999991;
-        width: auto !important;
-    }
-    .st-key-dashboard_controls_toggle [data-testid="stBaseButton-secondary"] {
-        width: 2.25rem;
-        min-width: 2.25rem;
-        min-height: 2rem;
-        padding: 0;
-        border: 1px solid light-dark(rgba(55, 75, 96, 0.2), rgba(148, 163, 184, 0.22));
-        border-radius: 0.65rem;
-        background: light-dark(#f3f7fa, #101a26);
-        color: var(--text);
-    }
-    .st-key-dashboard_controls_toggle [data-testid="stBaseButton-secondary"]:hover {
-        border-color: light-dark(rgba(8, 127, 105, 0.4), rgba(101, 240, 194, 0.5));
-        color: var(--mint);
-    }
-    .st-key-dashboard_controls_dismiss {
-        position: fixed !important;
-        inset: 0 !important;
-        z-index: 999992;
-        width: 100vw !important;
-        height: 100vh !important;
-    }
-    .st-key-dashboard_controls_dismiss [data-testid="stBaseButton-secondary"] {
-        position: fixed;
-        inset: 0;
-        width: 100vw;
-        height: 100vh;
-        min-height: 100vh;
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        color: transparent;
-        box-shadow: none;
-        cursor: default;
-    }
-    .st-key-dashboard_controls_panel {
-        position: absolute !important;
-        top: 2.75rem;
-        right: 0;
-        z-index: 999993;
-        width: 15rem !important;
-        max-width: min(15rem, calc(100vw - 2rem)) !important;
-        padding: 0.8rem !important;
-        border: 1px solid light-dark(rgba(55, 75, 96, 0.14), rgba(148, 163, 184, 0.18)) !important;
-        border-radius: 16px !important;
-        background: light-dark(#ffffff, #111a27) !important;
-        box-shadow: 0 16px 40px rgba(8, 15, 28, 0.2) !important;
-    }
-    .st-key-dashboard_controls_panel [data-testid="stVerticalBlock"] {
-        gap: 0.55rem;
-    }
-    .st-key-dashboard_controls_panel [data-testid="stBaseButton-secondary"] {
-        min-height: 2.45rem;
-        border: 1px solid light-dark(rgba(55, 75, 96, 0.14), rgba(148, 163, 184, 0.2));
-        border-radius: 10px;
-        background: light-dark(#f3f7fa, #182333);
-        color: var(--text);
-        transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
-    }
-    .st-key-dashboard_controls_panel [data-testid="stBaseButton-secondary"]:hover {
-        border-color: light-dark(rgba(8, 127, 105, 0.42), rgba(101, 240, 194, 0.48));
-        background: light-dark(#e8f5f1, #1a302f);
-        transform: translateY(-1px);
-    }
-    .st-key-dashboard_controls_panel .st-key-dashboard_rerun [data-testid="stBaseButton-secondary"] {
-        border-color: light-dark(#087f69, #65f0c2);
-        background: light-dark(#087f69, #65f0c2);
-        color: light-dark(#ffffff, #07120f);
-        font-weight: 650;
-    }
-    .st-key-dashboard_controls_panel .st-key-dashboard_rerun [data-testid="stBaseButton-secondary"]:hover {
-        background: light-dark(#066b59, #86f5d0);
-    }
-    .st-key-dashboard_controls_panel [data-testid="stCheckbox"] label {
-        min-height: 2.3rem;
-        padding: 0 0.25rem;
-        color: var(--text);
-    }
-    .st-key-dashboard_controls_panel [data-testid="stCheckbox"] input {
-        accent-color: light-dark(#087f69, #65f0c2);
-    }
     [data-testid="stSidebar"] {
         background: linear-gradient(
             180deg,
@@ -455,19 +367,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-def reiniciar_painel():
-    st.cache_data.clear()
-    for key in (
-        "filter_exchanges",
-        "filter_pairs",
-        "filter_regimes",
-        "filter_period",
-    ):
-        st.session_state.pop(key, None)
-    st.session_state["dashboard_auto_refresh"] = False
-    st.session_state["dashboard_controls_open"] = False
-
-
 @st.cache_data
 def carregar_dados():
     caminho_ficheiro = Path(__file__).resolve().parent / "data" / "cross_exchange_spread.csv"
@@ -496,51 +395,6 @@ def carregar_dados():
         .astype(bool)
     )
     return df.dropna(subset=["Data / Hora", "Spread Máximo (bps)"])
-
-
-@st.fragment(run_every="10s")
-def _auto_refresh():
-    if st.session_state.pop("_auto_refresh_skip_first", False):
-        return
-    st.rerun()
-
-
-with st.container(key="dashboard_controls"):
-    controls_open = st.session_state.get("dashboard_controls_open", False)
-    auto_refresh = st.session_state.get("dashboard_auto_refresh", False)
-    if st.button(
-        "⚙️",
-        key="dashboard_controls_toggle",
-    ):
-        controls_open = not controls_open
-        st.session_state["dashboard_controls_open"] = controls_open
-
-    if controls_open:
-        if st.button(
-            "Fechar controles",
-            key="dashboard_controls_dismiss",
-        ):
-            st.session_state["dashboard_controls_open"] = False
-            st.rerun()
-
-        with st.container(key="dashboard_controls_panel"):
-            st.caption("AÇÕES DO PAINEL")
-            st.button("Atualizar agora", key="dashboard_rerun", use_container_width=True)
-            auto_refresh = st.toggle(
-                "Auto atualizar (10 s)",
-                key="dashboard_auto_refresh",
-            )
-            st.caption("Reexecuta o painel; os dados continuam históricos.")
-            st.button(
-                "Reiniciar painel",
-                key="dashboard_clear_cache",
-                use_container_width=True,
-                on_click=reiniciar_painel,
-            )
-
-if auto_refresh:
-    st.session_state["_auto_refresh_skip_first"] = True
-    _auto_refresh()
 
 
 try:
@@ -573,7 +427,6 @@ corretoras_selecionadas = st.sidebar.multiselect(
     "Corretoras",
     options=corretoras_disponiveis,
     default=corretoras_disponiveis,
-    key="filter_exchanges",
 )
 
 pares_disponiveis = sorted(df["Par / Cripto"].dropna().unique().tolist())
@@ -581,7 +434,6 @@ pares_selecionados = st.sidebar.multiselect(
     "Pares",
     options=pares_disponiveis,
     default=pares_disponiveis,
-    key="filter_pairs",
 )
 
 regimes_disponiveis = sorted(df["Regime de Mercado"].dropna().unique().tolist())
@@ -589,7 +441,6 @@ regimes_selecionados = st.sidebar.multiselect(
     "Regimes de mercado",
     options=regimes_disponiveis,
     default=regimes_disponiveis,
-    key="filter_regimes",
 )
 
 data_minima = df["Data / Hora"].min().date()
@@ -600,7 +451,6 @@ periodo = st.sidebar.date_input(
     min_value=data_minima,
     max_value=data_maxima,
     format="DD/MM/YYYY",
-    key="filter_period",
 )
 
 if len(periodo) == 2:
