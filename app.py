@@ -13,35 +13,48 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    :root {
-        color-scheme: dark;
-        --canvas: #080b12;
-        --surface: rgba(17, 24, 39, 0.88);
-        --border: rgba(148, 163, 184, 0.14);
-        --muted: #91a0b5;
-        --text: #e8eef7;
-        --mint: #65f0c2;
-    }
     html, body, [class*="css"] {
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     .stApp {
+        --canvas: light-dark(#f3f6f8, #080b12);
+        --border: light-dark(rgba(55, 75, 96, 0.16), rgba(148, 163, 184, 0.14));
+        --muted: light-dark(#5f6f82, #91a0b5);
+        --text: light-dark(#172435, #e8eef7);
+        --mint: light-dark(#087f69, #65f0c2);
         background:
-            radial-gradient(ellipse at 10% 0%, rgba(35, 91, 107, 0.18), transparent 34rem),
-            radial-gradient(ellipse at 92% 8%, rgba(67, 56, 142, 0.16), transparent 30rem),
+            radial-gradient(ellipse at 10% 0%, light-dark(rgba(8, 127, 105, 0.12), rgba(35, 91, 107, 0.18)), transparent 34rem),
+            radial-gradient(ellipse at 92% 8%, light-dark(rgba(91, 93, 180, 0.09), rgba(67, 56, 142, 0.16)), transparent 30rem),
             var(--canvas);
         color: var(--text);
     }
     [data-testid="stHeader"] {
-        background: rgba(8, 11, 18, 0.72);
+        background: light-dark(rgba(243, 246, 248, 0.82), rgba(8, 11, 18, 0.72));
         backdrop-filter: blur(14px);
     }
+    [data-testid="stMainMenuItem-theme-System"] {
+        display: none !important;
+    }
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0d1420 0%, #0a1019 100%);
+        background: linear-gradient(
+            180deg,
+            light-dark(#edf2f5, #0d1420) 0%,
+            light-dark(#f5f7f9, #0a1019) 100%
+        );
         border-right: 1px solid var(--border);
     }
     [data-testid="stSidebar"] * {
         color: var(--text);
+    }
+    [data-testid="stSidebar"] [data-baseweb="tag"] {
+        background-color: light-dark(rgba(8, 127, 105, 0.07), rgba(101, 240, 194, 0.07)) !important;
+        border: 1px solid light-dark(rgba(8, 127, 105, 0.22), rgba(101, 240, 194, 0.22));
+        border-radius: 999px !important;
+        color: light-dark(#086c59, #b7f7e1) !important;
+    }
+    [data-testid="stSidebar"] [data-baseweb="tag"] svg {
+        color: light-dark(#086c59, #b7f7e1) !important;
+        fill: currentColor;
     }
     .block-container {
         max-width: 1520px;
@@ -53,11 +66,16 @@ st.markdown(
         overflow: hidden;
         padding: 2rem 2.15rem;
         margin-bottom: 1.6rem;
-        border: 1px solid rgba(148, 163, 184, 0.17);
+        border: 1px solid light-dark(rgba(55, 75, 96, 0.16), rgba(148, 163, 184, 0.17));
         border-radius: 22px;
         background:
-            radial-gradient(ellipse at 83% 18%, rgba(101, 240, 194, 0.15), transparent 24rem),
-            linear-gradient(112deg, rgba(18, 29, 42, 0.98), rgba(13, 19, 31, 0.94) 56%, rgba(20, 25, 43, 0.94));
+            radial-gradient(ellipse at 83% 18%, light-dark(rgba(8, 127, 105, 0.12), rgba(101, 240, 194, 0.15)), transparent 24rem),
+            linear-gradient(
+                112deg,
+                light-dark(rgba(255, 255, 255, 0.98), rgba(18, 29, 42, 0.98)),
+                light-dark(rgba(243, 247, 249, 0.96), rgba(13, 19, 31, 0.94)) 56%,
+                light-dark(rgba(238, 241, 249, 0.96), rgba(20, 25, 43, 0.94))
+            );
         box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
     }
     .hero-card:after {
@@ -67,7 +85,7 @@ st.markdown(
         right: 12%;
         width: 1px;
         height: 100%;
-        background: linear-gradient(transparent, rgba(101, 240, 194, 0.28), transparent);
+        background: linear-gradient(transparent, light-dark(rgba(8, 127, 105, 0.24), rgba(101, 240, 194, 0.28)), transparent);
         transform: rotate(28deg);
     }
     .hero-kicker, .section-kicker {
@@ -79,7 +97,7 @@ st.markdown(
     }
     .hero-title {
         margin: 0.65rem 0 0.45rem;
-        color: #f5f8fc;
+        color: light-dark(#142132, #f5f8fc);
         font-size: clamp(2rem, 4vw, 3.2rem);
         font-weight: 720;
         letter-spacing: -0.055em;
@@ -88,7 +106,7 @@ st.markdown(
     .hero-copy {
         max-width: 680px;
         margin: 0;
-        color: #a9b7c8;
+        color: var(--muted);
         font-size: 0.98rem;
         line-height: 1.65;
     }
@@ -98,10 +116,10 @@ st.markdown(
         gap: 0.5rem;
         margin-top: 1.2rem;
         padding: 0.45rem 0.72rem;
-        border: 1px solid rgba(101, 240, 194, 0.22);
+        border: 1px solid light-dark(rgba(8, 127, 105, 0.22), rgba(101, 240, 194, 0.22));
         border-radius: 999px;
-        background: rgba(101, 240, 194, 0.07);
-        color: #b7f7e1;
+        background: light-dark(rgba(8, 127, 105, 0.07), rgba(101, 240, 194, 0.07));
+        color: light-dark(#086c59, #b7f7e1);
         font-size: 0.72rem;
         font-weight: 650;
         letter-spacing: 0.04em;
@@ -111,34 +129,38 @@ st.markdown(
         height: 7px;
         border-radius: 50%;
         background: var(--mint);
-        box-shadow: 0 0 12px rgba(101, 240, 194, 0.8);
+        box-shadow: 0 0 12px light-dark(rgba(8, 127, 105, 0.48), rgba(101, 240, 194, 0.8));
     }
     .section-heading {
         margin: 1.4rem 0 0.2rem;
-        color: #f2f6fb;
+        color: light-dark(#172435, #f2f6fb);
         font-size: 1.16rem;
         font-weight: 680;
         letter-spacing: -0.025em;
     }
     [data-testid="stMetric"] {
         min-height: 122px;
-        background: linear-gradient(145deg, rgba(21, 31, 46, 0.96), rgba(13, 20, 31, 0.92));
+        background: linear-gradient(
+            145deg,
+            light-dark(rgba(255, 255, 255, 0.98), rgba(21, 31, 46, 0.96)),
+            light-dark(rgba(238, 243, 247, 0.96), rgba(13, 20, 31, 0.92))
+        );
         border: 1px solid var(--border);
         border-radius: 16px;
         padding: 1.05rem 1.15rem;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 10px 28px light-dark(rgba(29, 47, 66, 0.08), rgba(0, 0, 0, 0.12));
         transition: border-color 160ms ease, transform 160ms ease;
     }
     [data-testid="stMetric"]:hover {
-        border-color: rgba(101, 240, 194, 0.34);
+        border-color: light-dark(rgba(8, 127, 105, 0.34), rgba(101, 240, 194, 0.34));
         transform: translateY(-2px);
     }
     [data-testid="stMetricLabel"] {
-        color: #9cacc0;
+        color: var(--muted);
         font-size: 0.82rem;
     }
     [data-testid="stMetricValue"] {
-        color: #f2f7fb;
+        color: light-dark(#172435, #f2f7fb);
         font-size: 1.5rem;
         font-weight: 680;
     }
@@ -149,21 +171,27 @@ st.markdown(
     }
     div[data-baseweb="select"] > div,
     div[data-baseweb="input"] > div {
-        background: #121b29;
-        border-color: #29374a;
+        background: light-dark(#ffffff, #121b29);
+        border-color: light-dark(#c6d0dc, #29374a);
         border-radius: 10px;
     }
     input,
     textarea {
-        color-scheme: dark;
+        color-scheme: inherit;
     }
     [data-testid="stCaption"], .stMarkdown p {
-        color: #9cacc0;
+        color: var(--muted);
     }
     [data-testid="stExpander"] {
         border-color: var(--border);
         border-radius: 14px;
-        background: rgba(16, 23, 35, 0.55);
+        background: light-dark(rgba(255, 255, 255, 0.72), rgba(16, 23, 35, 0.55));
+    }
+    .js-plotly-plot text {
+        fill: light-dark(#536273, #a9b7c8) !important;
+    }
+    .js-plotly-plot .gridlayer path {
+        stroke: light-dark(rgba(91, 107, 125, 0.2), rgba(148, 163, 184, 0.12)) !important;
     }
     [data-testid="stAlert"] {
         border-radius: 12px;
